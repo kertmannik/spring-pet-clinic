@@ -20,6 +20,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+import java.util.Date;
+
 /**
  * <code>Validator</code> for <code>Pet</code> forms.
  * <p>
@@ -32,19 +34,26 @@ import org.springframework.validation.Validator;
 public class VisitValidator implements Validator {
 
     private static final String REQUIRED = "required";
+    private static final String BEFORE = "before";
 
     @Override
     public void validate(Object obj, Errors errors) {
         Visit visit = (Visit) obj;
         String description = visit.getDescription();
+        Date date = visit.getDate();
+
         // description validation
         if (!StringUtils.hasLength(description)) {
             errors.rejectValue("description", REQUIRED, REQUIRED);
         }
 
         // visit date validation
-        if (visit.getDate() == null) {
+        if (date == null) {
             errors.rejectValue("date", REQUIRED, REQUIRED);
+        }
+
+        else if (date.before(new Date())) {
+            errors.rejectValue("date", BEFORE, BEFORE);
         }
     }
 
