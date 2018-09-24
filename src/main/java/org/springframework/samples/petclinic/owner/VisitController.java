@@ -51,6 +51,11 @@ class VisitController {
         dataBinder.setDisallowedFields("id");
     }
 
+    @InitBinder("visit")
+    public void initVisitBinder(WebDataBinder dataBinder) {
+        dataBinder.setValidator(new VisitValidator());
+    }
+
     /**
      * Called before each and every @RequestMapping annotated method.
      * 2 goals:
